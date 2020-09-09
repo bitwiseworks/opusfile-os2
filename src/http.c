@@ -13,6 +13,11 @@
 #include "config.h"
 #endif
 
+#ifdef __OS2__
+#include <libcx/net.h>
+#include <opus/opusfile.h>
+#endif
+
 #include "internal.h"
 #include <ctype.h>
 #include <errno.h>
@@ -862,7 +867,9 @@ struct OpusHTTPStream{
   union{
     struct sockaddr     s;
     struct sockaddr_in  v4;
+#ifndef __OS2__
     struct sockaddr_in6 v6;
+#endif
   }                addr;
   /*The last time we re-resolved the host.*/
   op_time          resolve_time;
@@ -1959,6 +1966,7 @@ static int op_http_conn_start_tls(OpusHTTPStream *_stream,OpusHTTPConn *_conn,
           ip_len=sizeof(s->sin_addr);
           host=NULL;
         }break;
+#ifndef __OS2__
         case AF_INET6:{
           struct sockaddr_in6 *s;
           s=(struct sockaddr_in6 *)addr->ai_addr;
@@ -1967,6 +1975,7 @@ static int op_http_conn_start_tls(OpusHTTPStream *_stream,OpusHTTPConn *_conn,
           ip_len=sizeof(s->sin6_addr);
           host=NULL;
         }break;
+#endif
       }
     }
     /*Always set both host and ip to prevent matching against an old one.
