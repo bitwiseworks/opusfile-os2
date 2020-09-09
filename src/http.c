@@ -15,7 +15,6 @@
 
 #ifdef __OS2__
 #include <libcx/net.h>
-#include <opus/opusfile.h>
 #endif
 
 #include "internal.h"
